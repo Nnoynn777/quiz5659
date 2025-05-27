@@ -21,7 +21,7 @@ public class ThreatListActivity extends AppCompatActivity {
     private ThreatAdapter adapter;
     RecyclerView recyclerView;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +29,8 @@ public class ThreatListActivity extends AppCompatActivity {
 
         dbHelper = new DBHelper(this);
 
+       recyclerView = findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         try {
             // Явное открытие и проверка БД
             SQLiteDatabase db = dbHelper.openDatabase();
