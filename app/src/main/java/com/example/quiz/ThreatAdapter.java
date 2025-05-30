@@ -3,6 +3,7 @@ package com.example.quiz;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,30 +39,44 @@ public class ThreatAdapter extends RecyclerView.Adapter<ThreatAdapter.ThreatView
 
     @Override
     public void onBindViewHolder(ThreatViewHolder holder, int position) {
-        if (!cursor.moveToPosition(position)) return;
+        if (cursor == null || !cursor.moveToPosition(position)) {
+            Log.e("ThreatAdapter", "Cursor is null or moveToPosition failed for position: " + position);
+            return;
+        }
 
-        String title = cursor.getString(
-                cursor.getColumnIndexOrThrow(DBHelper.COLUMN_TITLE));
-        holder.titleTextView.setText(title);
+        try {
+            int idIndex = cursor.getColumnIndexOrThrow(DBHelper.COLUMN_ID);
+            int titleIndex = cursor.getColumnIndexOrThrow(DBHelper.COLUMN_TITLE);
+            int id = cursor.getInt(idIndex);
+            String title = cursor.getString(titleIndex);
+            holder.titleTextView.setText(title);
+            Log.d("ThreatAdapter", "Position: " + position + ", ID: " + id);
 
-        holder.itemView.setOnClickListener(v -> {
-            int id = cursor.getInt(
-                    cursor.getColumnIndexOrThrow(DBHelper.COLUMN_ID));
-
-            Intent intent = new Intent(context, ThreatDetailActivity.class);
-            intent.putExtra("THREAT_ID", id);
-            context.startActivity(intent);
-        });
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ThreatDetailActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("THREAT_ID", id);
+                context.startActivity(intent);
+            });
+        } catch (IllegalArgumentException e) {
+            Log.e("ThreatAdapter", "Column not found: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return cursor.getCount();
+        return (cursor != null) ? cursor.getCount() : 0;
     }
 
     public void swapCursor(Cursor newCursor) {
-        if (cursor != null) cursor.close();
+        if (cursor != null) {
+            cursor.close();
+        }
         cursor = newCursor;
+        if (newCursor != null) {
+            Log.d("ThreatAdapter", "New cursor count: " + newCursor.getCount());
+        }
         notifyDataSetChanged();
     }
 }

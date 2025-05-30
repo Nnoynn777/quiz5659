@@ -15,43 +15,32 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class SplashScreen extends AppCompatActivity {
 
-    Animation topAnim, bottomAnim;
-    TextView appName, description, developer;
-    ImageView imageView;
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_splash_screen);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        FirebaseApp.initializeApp(this);
 
-        appName = findViewById(R.id.appName);
-        description = findViewById(R.id.description);
-        developer = findViewById(R.id.developer);
-        imageView = findViewById(R.id.imageView);
-        topAnim = AnimationUtils.loadAnimation(this, R.anim.top_animation);
-        bottomAnim =AnimationUtils.loadAnimation(this, R.anim.botom_animation);
+        mAuth = FirebaseAuth.getInstance();
 
-        imageView.setAnimation(topAnim);
-        appName.setAnimation(bottomAnim);
-        description.setAnimation(bottomAnim);
-        developer.setAnimation(bottomAnim);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashScreen.this, SignUp.class);
-                startActivity(intent);
-                finish();
+        new Handler().postDelayed(() -> {
+            FirebaseUser currentUser = mAuth.getCurrentUser();
+            if (currentUser != null) {
+                // Пользователь вошел, переходим к основному экрану
+                startActivity(new Intent(SplashScreen.this, ThreatListActivity.class));
+            } else {
+                // Пользователь не вошел, переходим к экрану входа
+                startActivity(new Intent(SplashScreen.this, SignIn.class));
             }
-        },3000);
-
+            finish();
+        }, 2000); // Задержка 2 секунды
     }
 }
