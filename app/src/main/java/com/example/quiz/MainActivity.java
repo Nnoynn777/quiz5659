@@ -19,10 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Инициализация Firebase
-        if (FirebaseApp.getApps(this).isEmpty()) {
-            FirebaseApp.initializeApp(getApplicationContext());
-        }
+        FirebaseApp.initializeApp(getApplicationContext());
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -30,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser == null) {
             startActivity(new Intent(this, SignIn.class));
+            finish();
+        }
+        else {
+            startActivity(new Intent(this, ThreatListActivity.class));
             finish();
         }
     }

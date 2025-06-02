@@ -14,9 +14,6 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,30 +31,22 @@ public class SignUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_sign_up);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        mAuth = FirebaseAuth.getInstance();
-        progressBar = findViewById(R.id.progressbar);
-
-        // Переход на вход
+        mAuth=FirebaseAuth.getInstance();
+        // Сначала инициализируем представления
+        signIn = findViewById(R.id.create);
+        userName = findViewById(R.id.userName);
+        userEmail = findViewById(R.id.userEmail);
+        userPhone = findViewById(R.id.userPhone);
+        password = findViewById(R.id.password);
+        register = findViewById(R.id.registr);
+        progressBar=findViewById(R.id.progressbar);
+        // Затем устанавливаем слушатели кликов
         signIn.setOnClickListener(v -> {
             startActivity(new Intent(SignUp.this, SignIn.class));
             finish();
         });
 
-        // Обработка регистрации
         register.setOnClickListener(v -> registerUser());
-
-        userName=findViewById(R.id.userName);
-        userEmail=findViewById(R.id.userEmail);
-        userPhone=findViewById(R.id.userPhone);
-        password=findViewById(R.id.password);
-        register=findViewById(R.id.регистрация);
-        signIn=findViewById(R.id.Войтиздесь);
-
     }
 
     private void registerUser() {

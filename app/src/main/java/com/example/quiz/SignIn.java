@@ -40,19 +40,19 @@ public class SignIn extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         progressBar = findViewById(R.id.progressbar);
-
+        Button signUp=findViewById(R.id.reg);
+        Button signIn=findViewById(R.id.create);
         signUp.setOnClickListener(v -> {
             startActivity(new Intent(SignIn.this, SignUp.class));
             finish();
         });
-
+        userEmail=findViewById(R.id.userEmail);
+        password=findViewById(R.id.password);
+        //signUp=findViewById(R.id.create);
         // Обработка входа
         signIn.setOnClickListener(v -> signInUser());
 
-        userEmail=findViewById(R.id.userEmail);
-        password=findViewById(R.id.password);
-        signIn=findViewById(R.id.регистрация);
-        signUp=findViewById(R.id.Войтиздесь);
+
     }
 
     private void signInUser() {

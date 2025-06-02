@@ -80,7 +80,7 @@
             android:textColorHint="@color/black"/>
 
         <Button
-            android:id="@+id/регистрация"
+            android:id="@+id/registr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Регистрация"
@@ -101,7 +101,7 @@
                 android:textSize="15dp"/>
 
             <TextView
-                android:id="@+id/Войтиздесь"
+                android:id="@+id/create"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text=" Войти здесь"
